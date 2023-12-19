@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math as m
 import xml.etree.ElementTree as et
+import os.path
 
 
 def func(x):
@@ -23,9 +24,8 @@ for i in range(len(xlist)):
     y = func(xlist[i])
     ylist.append(y)
 
-plt.plot(xlist, ylist)
-plt.savefig('plot_1.png', dpi=50, bbox_inches='tight')
-plt.show()
+if(os.path.exists('results') == False):
+    os.mkdir('results')
 
 data = et.Element('data')
 for i in range(len(xlist)):
@@ -37,4 +37,8 @@ for i in range(len(xlist)):
 
 ffile = et.ElementTree(data)
 et.indent(ffile, space="\t", level=0)
-ffile.write("results_1.xml", encoding="utf-8", xml_declaration=True)
+ffile.write("results/results_1.xml", encoding="utf-8", xml_declaration=True)
+
+plt.plot(xlist, ylist)
+plt.savefig('results/plot_1.png', dpi=50, bbox_inches='tight')
+plt.show()
