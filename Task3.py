@@ -322,23 +322,25 @@ def showProbeSignalsCFFT(probes: list[Probe],
 
     # legends = []
     # Вывод сигналов в окно
-    Elist = []
+
     for n, (probe, ax) in enumerate(zip(probes, axes_list)):
         # Настройка внешнего вида графиков
-        ax.set_xlim(0.73e12, 0.76e12)
+        # ax.set_xlim(0.73e12, 0.76e12)
         ax.set_xlabel('f, ГГц')
         ax.set_ylabel('|S|, Вс')
         ax.grid()
-
-        freq_list = np.arange(len(probe.E)) * df
+        freq_list = np.arange(len(probe.E)) * df * 1e-9
         spectrum = np.abs(fft(probe.E))
         spectrum = fftshift(spectrum)
+        n = int(len(spectrum) / 2)
+        for i in range(n):
+            spectrum[i] = 0
         maxval = np.max(spectrum)
         minval = np.min(spectrum)
         legend = 'Датчик {n}: x = {pos:.5f}; Max = {maxval:.5f}; Min = {minval:.5f}'.format(
             n=n + 1, pos=probe.position * dx, maxval=maxval, minval=minval)
         # legends.append(legend)
-        ax.plot(freq_list, spectrum / np.max(spectrum))
+        ax.plot(freq_list, 2 * spectrum / np.max(spectrum))
 
         # Создание и отображение легенды на графике
         legend_obj = ax.legend([legend])
@@ -384,7 +386,7 @@ if __name__ == '__main__':
     # Параметры моделирования
     # Частота сигнала, Гц
     f_Hz = 1.2e9
-    df = 0.1e9
+
 
     # Дискрет по пространству в м
     dx = 2e-3
@@ -399,13 +401,13 @@ if __name__ == '__main__':
     maxSize_m = 6.0
 
     # Время расчета в секундах
-    maxTime_s = 100e-9
-
+    maxTime_s = 110e-9
+    df = 1 / maxTime_s
     # Положение источника в м
     sourcePos_m = 3
 
     # Координаты датчиков для регистрации поля в м
-    probesPos_m = [2, 4]
+    probesPos_m = [0, 3, 4]
 
     # Параметры слоев
     layers_cont = [LayerContinuous(0, eps=4.5, sigma=0.0)]
@@ -473,7 +475,7 @@ if __name__ == '__main__':
     # Коэффициенты для учета потерь
     loss = np.zeros(maxSize)
     layer_loss = 2900
-    loss[layer_loss:] = 0.02
+    loss[layer_loss:] = 0
     #loss = sigma * dt / (2 * eps * eps0)
     ceze = (1.0 - loss) / (1.0 + loss)
     cezh = W0 / (eps * (1.0 + loss))
