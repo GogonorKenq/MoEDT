@@ -325,7 +325,7 @@ def showProbeSignalsCFFT(probes: list[Probe],
 
     for n, (probe, ax) in enumerate(zip(probes, axes_list)):
         # Настройка внешнего вида графиков
-        # ax.set_xlim(0.73e12, 0.76e12)
+        ax.set_xlim(74.94, 75.40)
         ax.set_xlabel('f, ГГц')
         ax.set_ylabel('|S|, Вс')
         ax.grid()
