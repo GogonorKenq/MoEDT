@@ -468,7 +468,6 @@ if __name__ == '__main__':
 
         # Расчет компоненты поля E
         Ez[1:-1] = ceze[1: -1] * Ez[1: -1] + cezh[1: -1] * (Hy[1:] - Hy[: -1])
-        Ez[-1] = Ez[-2]
 
         # Источник возбуждения с использованием метода
         # Total Field / Scattered Field
@@ -494,7 +493,7 @@ if __name__ == '__main__':
         if freq[i] < 0:
             sp[i] = 0
     plt.plot(freq / (dt * 1e9), abs(sp) / max(abs(sp)))
-    plt.xlim(0.1, 0.4)
+    plt.xlim(0, 0.6)
     plt.grid()
     plt.xlabel('f, ГГц')
     display.stop()
